@@ -1,3 +1,4 @@
+- Vinod says that this community is amazing.
 For Begginers to begin with.  
 
 echo "# gitclassroom-git" >> README.md
