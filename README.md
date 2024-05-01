@@ -1,5 +1,4 @@
-- Vinod says that this community is amazing.
-For Begginers to begin with.  
+- Vinod says that this community is amazing for Begginers to begin with.  
 
 echo "# gitclassroom-git" >> README.md
 git init
