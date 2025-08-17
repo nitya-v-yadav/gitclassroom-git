@@ -39,9 +39,9 @@ jobs:
 
       - name: Report Installation Status
         run: |
-          if [ "${{ steps.verify.outputs.status }}" = "success" ]; then
-            echo "✅ Fortanix KMS Client installed successfully."
-          else
-            echo "❌ Fortanix KMS Client installation failed."
-            exit 1
-          fi
+         if ("${{ steps.verify.outputs.status }}" -eq "success") {
+         Write-Host "✅ Fortanix KMS Client installed successfully."
+         } else {
+         Write-Host "❌ Fortanix KMS Client installation failed."
+         exit 1
+         }
