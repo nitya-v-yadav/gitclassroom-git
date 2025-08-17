@@ -22,7 +22,7 @@ jobs:
 
       - name: Install FortanixKmsClient.msi
         run: |
-          Start-Process msiexec.exe -ArgumentList "/i FortanixKmsClient.msi /qn /norestart" -Wait
+          Start-Process msiexec.exe -ArgumentList "/i FortanixKmsClient-5.1.2830.msi /qn /norestart" -Wait
         continue-on-error: true
 
       - name: Verify Installation
