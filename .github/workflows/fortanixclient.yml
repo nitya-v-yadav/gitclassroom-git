@@ -1,0 +1,47 @@
+name: Download and Install Fortanix KMS Client
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download-and-install:
+    runs-on: windows-latest
+    steps:
+      - name: Download FortanixKmsClient.msi
+        env:
+          FORTANIX_USER: ${{ secrets.FORTANIX_USERNAME }}
+          FORTANIX_PASS: ${{ secrets.FORTANIX_PASSWORD }}
+        run: |
+          $url = "https://<fortanix-download-url>/FortanixKmsClient.msi"
+          $output = "FortanixKmsClient.msi"
+          $pair = "$env:FORTANIX_USER`:$env:FORTANIX_PASS"
+          $bytes = [System.Text.Encoding]::UTF8.GetBytes($pair)
+          $encoded = [Convert]::ToBase64String($bytes)
+          $headers = @{Authorization = "Basic $encoded"}
+          Invoke-WebRequest -Uri $url -Headers $headers -OutFile $output
+
+      - name: Install FortanixKmsClient.msi
+        run: |
+          Start-Process msiexec.exe -ArgumentList "/i FortanixKmsClient.msi /qn /norestart" -Wait
+        continue-on-error: true
+
+      - name: Verify Installation
+        id: verify
+        run: |
+          $exists = Test-Path "C:\Program Files\Fortanix\KmsClient\"
+          if ($exists) {
+            echo "status=success" >> $env:GITHUB_OUTPUT
+            Write-Host "Fortanix KMS Client installation succeeded."
+          } else {
+            echo "status=failure" >> $env:GITHUB_OUTPUT
+            Write-Host "Fortanix KMS Client installation failed."
+          }
+
+      - name: Report Installation Status
+        run: |
+          if [ "${{ steps.verify.outputs.status }}" = "success" ]; then
+            echo "✅ Fortanix KMS Client installed successfully."
+          else
+            echo "❌ Fortanix KMS Client installation failed."
+            exit 1
+          fi
