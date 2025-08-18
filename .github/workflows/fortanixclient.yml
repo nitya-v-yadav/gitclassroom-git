@@ -25,6 +25,16 @@ jobs:
           Start-Process msiexec.exe -ArgumentList "/i FortanixKmsClient-5.1.2830.msi /qn /norestart" -Wait
         continue-on-error: true
 
+      - name: Check FortanixKmsClientConfig.exe existence
+        shell: pwsh
+        run: |
+          if (Test-Path "C:\Program Files\Fortanix\KmsClient\FortanixKmsClientConfig.exe") {
+            Write-Host "FortanixKmsClientConfig.exe exists."
+          } else {
+            Write-Host "FortanixKmsClientConfig.exe NOT found."
+            exit 1
+          }
+
       - name: Verify Installation
         id: verify
         run: |
